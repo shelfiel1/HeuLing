@@ -1,0 +1,21 @@
+{
+  "name": "HeuLing — Heuron TE 현장관리",
+  "short_name": "HeuLing",
+  "description": "Heuron TE팀 현장 CS/데모/업데이트 관리 앱",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#0f172a",
+  "theme_color": "#0f172a",
+  "orientation": "portrait-primary",
+  "icons": [
+    {
+      "src": "/favicon.ico",
+      "sizes": "64x64 32x32 24x24 16x16",
+      "type": "image/x-icon"
+    }
+  ],
+  "categories": [
+    "productivity",
+    "medical"
+  ]
+}

@@ -1,0 +1,208 @@
+@import url("https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;600;700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap");
+@import "tailwindcss";
+@import "tw-animate-css";
+
+@custom-variant dark (&:is(.dark *));
+
+/*
+==========================================================================
+【AI HANDOVER NOTE】
+1. DESIGN PHILOSOPHY:
+   - Medical-Tech Professionalism: HeuLing은 의료 AI 현장 엔지니어를 위한 도구로, 병원 환경에서 신뢰감과 전문성을 전달해야 합니다. Neo-minimalism과 Bento surfaces를 결합하여 정보 밀도가 높은 대시보드를 명확하게 구조화합니다.
+   - Mobile-First Physicality: 모바일 현장 사용을 고려해 터치 타겟을 충분히 확보하고, subtle rim-light와 card elevation으로 물리적 계층감을 부여합니다. 어두운 환경(병원 복도, 야간 작업)에서도 가독성을 유지하기 위해 dark mode를 기본 권장합니다.
+   - Status-Driven Color System: 제품 상태(데모/회수/정상/만료예정), CS 요청 유형, 이슈 우선순위 등 상태 기반 UI가 핵심입니다. 색상은 의료 환경에서 직관적으로 인지 가능하도록 설계되었습니다.
+
+2. TYPOGRAPHY:
+   - Sans: Inter는 높은 가독성과 숫자 판독성을 제공하며, Noto Sans KR은 한글 UI 텍스트의 균형감과 명료함을 보장합니다. 의료 기기 정보, 병원명, 담당자 이름 등 혼용 텍스트에서 일관된 리듬을 유지합니다.
+   - Mono: JetBrains Mono는 IP 주소, 버전 번호, 제품 시리얼 등 기술 데이터 표시에 사용됩니다. 탭 정렬과 숫자 구분이 명확해 현장에서 빠른 확인이 가능합니다.
+
+3. COLOR SYSTEM:
+   - 브랜드 주색: Navy-Teal (Hue 200-210) — 의료 신뢰감(blue)과 기술 혁신(teal)을 결합한 휴런 브랜드 정체성을 반영합니다. --brand는 --primary와 --ring에 직접 매핑되며, --accent는 약간 더 밝은 teal(Hue 180)로 CTA 버튼과 활성 상태를 강조합니다.
+   - 상태 색상 로직:
+     · destructive (Hue 10): 회수, 만료, 장애 등 긴급/부정 상태
+     · success (Hue 150): 정상, 완료, 처리 완료
+     · warning (Hue 50): 만료예정, 대기, 확인 필요
+   - Dark mode 우선: 병원 현장의 저조도 환경과 야간 작업을 고려해 dark mode의 색도를 light mode보다 약간 높여 시각적 피로를 줄이고 상태 구분을 명확히 합니다.
+
+4. USAGE GUIDE:
+   - 레이아웃: Mobile-first Bento grid — 하단 네비게이션 바(6개 모듈), 카드 기반 리스트, 풀 스크린 폼. 데스크톱에서는 centered container(max-w-7xl)로 확장됩니다.
+   - 특수 효과: Card에 subtle backdrop-blur(8px)와 1px rim-light(border-t)를 적용해 계층감을 부여합니다. 상태 배지는 saturated accent colors + rounded-full로 시각적 우선순위를 표현합니다.
+   - 폼 디자인: 입력 필드는 --input border + --muted background로 명확히 구분하고, placeholder는 --muted-foreground로 예시 텍스트를 제공합니다. 사진 첨부 영역은 dashed border + --accent로 드래그 앤 드롭을 유도합니다.
+   - 오프라인 표시: 네트워크 상태는 --warning(오프라인) / --success(온라인)로 상단에 토스트 형태로 표시하며, 로컬 저장 중인 항목은 --muted card + pending icon으로 시각화합니다.
+   - 접근성: 모든 상태 색상은 WCAG AA 대비를 만족하며, 터치 타겟은 최소 44x44px를 보장합니다. 한글 텍스트는 16px 이상 권장합니다.
+==========================================================================
+*/
+
+:root {
+  /* Typography */
+  --font-sans: 'Inter', 'Noto Sans KR', -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
+  --font-mono: 'JetBrains Mono', 'Consolas', monospace;
+  
+  /* Radius */
+  --radius: 0.75rem;
+
+  /* Core UI Tokens */
+  --background: oklch(0.98 0.005 210);
+  --foreground: oklch(0.15 0.02 210);
+  --card: oklch(1 0 0);
+  --card-foreground: oklch(0.15 0.02 210);
+  --popover: oklch(1 0 0);
+  --popover-foreground: oklch(0.15 0.02 210);
+  --primary: oklch(0.45 0.15 210);
+  --primary-foreground: oklch(0.98 0.005 210);
+  --secondary: oklch(0.92 0.01 210);
+  --secondary-foreground: oklch(0.2 0.02 210);
+  --muted: oklch(0.95 0.008 210);
+  --muted-foreground: oklch(0.48 0.02 210);
+  --accent: oklch(0.55 0.14 180);
+  --accent-foreground: oklch(0.98 0.005 180);
+  --destructive: oklch(0.55 0.22 10);
+  --destructive-foreground: oklch(0.98 0.005 10);
+  --border: oklch(0.88 0.01 210);
+  --input: oklch(0.88 0.01 210);
+  --ring: oklch(0.45 0.15 210);
+  
+  /* Chart Tokens */
+  --chart-1: oklch(0.55 0.18 210);
+  --chart-2: oklch(0.6 0.16 180);
+  --chart-3: oklch(0.58 0.2 150);
+  --chart-4: oklch(0.62 0.18 50);
+  --chart-5: oklch(0.56 0.2 10);
+  
+  /* Sidebar Tokens */
+  --sidebar: oklch(0.98 0.005 210);
+  --sidebar-foreground: oklch(0.2 0.02 210);
+  --sidebar-primary: oklch(0.45 0.15 210);
+  --sidebar-primary-foreground: oklch(0.98 0.005 210);
+  --sidebar-accent: oklch(0.55 0.14 180);
+  --sidebar-accent-foreground: oklch(0.98 0.005 180);
+  --sidebar-border: oklch(0.88 0.01 210);
+  --sidebar-ring: oklch(0.45 0.15 210);
+}
+
+.dark {
+  --background: oklch(0.12 0.015 210);
+  --foreground: oklch(0.92 0.01 210);
+  --card: oklch(0.16 0.018 210);
+  --card-foreground: oklch(0.92 0.01 210);
+  --popover: oklch(0.14 0.016 210);
+  --popover-foreground: oklch(0.92 0.01 210);
+  --primary: oklch(0.58 0.18 210);
+  --primary-foreground: oklch(0.12 0.015 210);
+  --secondary: oklch(0.22 0.025 210);
+  --secondary-foreground: oklch(0.88 0.012 210);
+  --muted: oklch(0.2 0.02 210);
+  --muted-foreground: oklch(0.62 0.015 210);
+  --accent: oklch(0.65 0.16 180);
+  --accent-foreground: oklch(0.12 0.015 180);
+  --destructive: oklch(0.62 0.24 10);
+  --destructive-foreground: oklch(0.95 0.01 10);
+  --border: oklch(0.28 0.03 210);
+  --input: oklch(0.28 0.03 210);
+  --ring: oklch(0.58 0.18 210);
+  
+  /* Chart Tokens */
+  --chart-1: oklch(0.6 0.2 210);
+  --chart-2: oklch(0.65 0.18 180);
+  --chart-3: oklch(0.62 0.22 150);
+  --chart-4: oklch(0.68 0.2 50);
+  --chart-5: oklch(0.64 0.22 10);
+  
+  /* Sidebar Tokens */
+  --sidebar: oklch(0.14 0.016 210);
+  --sidebar-foreground: oklch(0.88 0.012 210);
+  --sidebar-primary: oklch(0.58 0.18 210);
+  --sidebar-primary-foreground: oklch(0.12 0.015 210);
+  --sidebar-accent: oklch(0.65 0.16 180);
+  --sidebar-accent-foreground: oklch(0.12 0.015 180);
+  --sidebar-border: oklch(0.28 0.03 210);
+  --sidebar-ring: oklch(0.58 0.18 210);
+}
+
+@theme inline {
+  /* Shadcn Core Mapping */
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+
+  /* Charts Mapping */
+  --color-chart-1: var(--chart-1);
+  --color-chart-2: var(--chart-2);
+  --color-chart-3: var(--chart-3);
+  --color-chart-4: var(--chart-4);
+  --color-chart-5: var(--chart-5);
+
+  /* Sidebar Mapping */
+  --color-sidebar: var(--sidebar);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-ring: var(--sidebar-ring);
+
+  /* Typography */
+  --font-sans: var(--font-sans);
+  --font-mono: var(--font-mono);
+
+  /* Radius */
+  --radius-lg: var(--radius);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-xl: calc(var(--radius) + 4px);
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+
+  html {
+    @apply scroll-smooth antialiased;
+  }
+
+  body {
+    @apply bg-background text-foreground font-sans min-h-screen;
+    font-feature-settings: "cv02", "cv03", "cv04", "cv11";
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    @apply font-semibold tracking-tight;
+  }
+
+  code, pre {
+    @apply font-mono;
+  }
+
+  ::selection {
+    @apply bg-primary/20 text-primary;
+  }
+
+  ::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+  }
+  ::-webkit-scrollbar-track {
+    @apply bg-transparent;
+  }
+  ::-webkit-scrollbar-thumb {
+    @apply bg-muted-foreground/20 rounded-full hover:bg-muted-foreground/40;
+  }
+}
