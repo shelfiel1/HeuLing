@@ -147,8 +147,7 @@ cd HeuLing
 `.env` 파일을 루트에 생성하세요:
 
 ```env
-VITE_GAS_API_URL=https://script.google.com/macros/s/your-deployment-id/exec
-
+const GAS_URL = import.meta.env.VITE_GAS_API_URL
 ```
 
 > ⚠️ `.env` 파일은 `.gitignore`에 포함되어 있습니다. GAS URL을 직접 코드에 노출하지 마세요.
