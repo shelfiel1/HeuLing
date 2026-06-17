@@ -150,9 +150,6 @@ cd HeuLing
 const GAS_URL = import.meta.env.VITE_GAS_API_URL
 ```
 
-> ⚠️ `.env` 파일은 `.gitignore`에 포함되어 있습니다. GAS URL을 직접 코드에 노출하지 마세요.
-
----
 
 ## 📦 버전 히스토리
 
