@@ -14,7 +14,7 @@
 
 
 // ── 스프레드시트 ID ──────────────────────────────────────────
-var HEULING_SS_ID = '1IZ-dn_kqkjtnpMHGR3v7rBC4nWhDYKyDaA54sTeC2vQ';
+var 현장관리시스템_SS_ID = '1IZ-dn_kqkjtnpMHGR3v7rBC4nWhDYKyDaA54sTeC2vQ';
 
 
 // ── 정확한 시트명 (이모지 인코딩 문제 → 키워드 탐색 방식 병행) ──
@@ -36,11 +36,11 @@ var HL_SH = {
 
 
 // ── 초기 관리자 이메일 (직원목록 시트 없을 때 폴백) ────────────
-var INITIAL_ADMIN_EMAIL = 'shkim@iheuron.com';
+var INITIAL_ADMIN_EMAIL = 'shkim@회사.com';
 
 // ── TE팀 직원 목록 (폴백용 — 직원목록 시트 우선) ───────────────
-var HEURON_STAFF = [
-  { name: '김성환', email: 'shkim@iheuron.com' },
+var 회사_STAFF = [
+  { name: '김성환', email: 'shkim@회사.com' },
 ];
 
 
@@ -52,28 +52,18 @@ var RECEIPT_ROOT_FOLDER_ID  = '';
 
 
 // ── Confluence 설정 ──────────────────────────────────────────
-var CONFLUENCE_BASE_URL = 'https://heuron.atlassian.net';
-var CONFLUENCE_EMAIL    = 'shkim@iheuron.com';
+var CONFLUENCE_BASE_URL = 'https://회사.atlassian.net';
+var CONFLUENCE_EMAIL    = 'shkim@회사.com';
 var CONFLUENCE_TOKEN    = 'ATATT3xFfGF0oflH6RtXTkbaLsPl3yTVx4fuJyBKNnUg1mQC_EzrW19cNq-z9iO0rkiP8oxqFweiz_T7cnyVvQG4ZK-MlgEk40H0X3bkeutdhF4csgVRq-iQyZc-9Nj-aFBCb1IEpw7uRZJD6eCETBa1l-k7676OQus3AyzZXqtld3XyiZdatrU=62B41899';
 var CONFLUENCE_SPACE    = 'release';
 
 
 // ── 시트 제품명 → Confluence 제품명 매핑 ─────────────────────
 // 시트에는 짧은 코드(ST, AD, CTP...)를 쓰고
-// Confluence 페이지 제목은 "Heuron SCS", "Heuron AD" 등을 사용
+// Confluence 페이지 제목은 "제품명", "제품명" 등을 사용
 var PRODUCT_ALIAS = {
-  'ST':     'Heuron SCS',
-  'SCS':    'Heuron SCS',
-  'AD':     'Heuron AD',
-  'CTP':    'Heuron CTP',
-  'CTA':    'Heuron CTA',
-  'NI':     'Heuron NI',
-  'IPD':    'Heuron IPD',
-  'NM':     'Heuron NM',
-  'PT':     'Heuron PT',
-  'BrainPET': 'Heuron BrainPET',
-  'Common': 'Heuron Common',
-  'Agent':  'Heuron Agent',
+  '제품1':     '제품1',
+ 
 };
 
 
@@ -289,9 +279,9 @@ function _lookupLatestVersion_(sheetProdName, releaseMap) {
     if (key.toLowerCase() === nameLower) return releaseMap[key];
   }
 
-  // 3) Confluence 제품명에 시트 제품명 포함 여부 (예: "AD" in "Heuron AD")
+  // 3) Confluence 제품명에 시트 제품명 포함 여부 (예: "AD" in "회사 AD")
   for (var k in releaseMap) {
-    var kl = k.toLowerCase().replace('heuron ', '').trim();
+    var kl = k.toLowerCase().replace('회사 ', '').trim();
     if (kl === nameLower) return releaseMap[k];
   }
 
@@ -304,7 +294,7 @@ function _lookupLatestVersion_(sheetProdName, releaseMap) {
 // ──────────────────────────────────────────────────────────────
 function handleGetHospitalList(params) {
   var region   = String((params && params.region) || 'domestic').trim().toLowerCase();
-  var ss       = SpreadsheetApp.openById(HEULING_SS_ID);
+  var ss       = SpreadsheetApp.openById(현장관리시스템_SS_ID);
   var sh       = (region === 'overseas') ? _getOverseasSheet_(ss) : _getDomesticSheet_(ss);
   if (!sh) return _err_('시트 없음: ' + (region === 'overseas' ? '제품현황_해외' : '제품현황_국내'));
 
@@ -396,7 +386,7 @@ function handleGetHospitalDetail(params) {
   var region       = String((params && params.region) || 'domestic').trim().toLowerCase();
   if (!hospitalName) return _err_('hospitalName 필수');
 
-  var ss = SpreadsheetApp.openById(HEULING_SS_ID);
+  var ss = SpreadsheetApp.openById(현장관리시스템_SS_ID);
   var sh = (region === 'overseas') ? _getOverseasSheet_(ss) : _getDomesticSheet_(ss);
   if (!sh) return _err_('시트 없음: ' + (region === 'overseas' ? '제품현황_해외' : '제품현황_국내'));
 
@@ -564,7 +554,7 @@ function handleSearchHospital(params) {
   var region  = String((params && params.region)  || 'domestic').trim().toLowerCase();
   if (!keyword) return _ok_([]);
 
-  var ss = SpreadsheetApp.openById(HEULING_SS_ID);
+  var ss = SpreadsheetApp.openById(현장관리시스템_SS_ID);
   var sh = (region === 'overseas') ? _getOverseasSheet_(ss) : _getDomesticSheet_(ss);
   if (!sh) return _err_('시트 없음');
 
@@ -593,7 +583,7 @@ function handleGetProductList(params) {
   var region       = String((params && params.region)       || 'domestic').trim().toLowerCase();
   if (!hospitalName) return _err_('hospitalName 필수');
 
-  var ss = SpreadsheetApp.openById(HEULING_SS_ID);
+  var ss = SpreadsheetApp.openById(현장관리시스템_SS_ID);
   var sh = (region === 'overseas') ? _getOverseasSheet_(ss) : _getDomesticSheet_(ss);
   if (!sh) return _err_('시트 없음');
 
@@ -617,7 +607,7 @@ function handleGetProductList(params) {
 // [2] CS 등록
 // ──────────────────────────────────────────────────────────────
 function handleSubmitCS(payload) {
-  var ss = SpreadsheetApp.openById(HEULING_SS_ID);
+  var ss = SpreadsheetApp.openById(현장관리시스템_SS_ID);
   var sh = ss.getSheetByName(HL_SH.CS);
   if (!sh) return _err_('시트 없음: ' + HL_SH.CS);
 
@@ -742,7 +732,7 @@ function handleSubmitCS(payload) {
 
 
 function handleCreateIssue(payload) {
-  var ss      = SpreadsheetApp.openById(HEULING_SS_ID);
+  var ss      = SpreadsheetApp.openById(현장관리시스템_SS_ID);
   var sh      = ss.getSheetByName(HL_SH.CS);
   if (!sh) return _err_('시트 없음: ' + HL_SH.CS);
 
@@ -776,7 +766,7 @@ function handleCreateIssue(payload) {
       var dueDateStr = dueDate instanceof Date ? Utilities.formatDate(dueDate, 'Asia/Seoul', 'yyyy-MM-dd') : '';
       MailApp.sendEmail({
         to: assignee,
-        subject: '[HeuLing] 새 이슈 배정 — ' + hospital,
+        subject: '[현장관리시스템] 새 이슈 배정 — ' + hospital,
         htmlBody: '<p>새 이슈가 배정되었습니다.</p>' +
           '<p><b>병원:</b> ' + hospital + '</p>' +
           '<p><b>제품:</b> ' + product + '</p>' +
@@ -791,7 +781,7 @@ function handleCreateIssue(payload) {
 
 
 function handleAddContact(payload) {
-  var ss = SpreadsheetApp.openById(HEULING_SS_ID);
+  var ss = SpreadsheetApp.openById(현장관리시스템_SS_ID);
   var sh = _getContactSheet_(ss);
   if (!sh) return _ok_({ skipped: true, reason: '병원연락처 시트 없음' });
 
@@ -811,7 +801,7 @@ function handleAddContact(payload) {
 // [3] 신규 데모 등록
 // ──────────────────────────────────────────────────────────────
 function handleRegisterDemo(payload) {
-  var ss = SpreadsheetApp.openById(HEULING_SS_ID);
+  var ss = SpreadsheetApp.openById(현장관리시스템_SS_ID);
   var sh = _getDomesticSheet_(ss);
   if (!sh) return _err_('시트 없음: 제품현황_국내');
 
@@ -903,7 +893,7 @@ function handleRegisterDemo(payload) {
 // [4] 업데이트
 // ──────────────────────────────────────────────────────────────
 function handleUpdateLicense(payload) {
-  var ss = SpreadsheetApp.openById(HEULING_SS_ID);
+  var ss = SpreadsheetApp.openById(현장관리시스템_SS_ID);
   var sh = _getDomesticSheet_(ss);
   if (!sh) return _err_('시트 없음: 제품현황_국내');
 
@@ -951,7 +941,7 @@ function handleUpdateLicense(payload) {
 
 
 function handleUpdateProduct(payload) {
-  var ss = SpreadsheetApp.openById(HEULING_SS_ID);
+  var ss = SpreadsheetApp.openById(현장관리시스템_SS_ID);
   var sh = _getDomesticSheet_(ss);
   if (!sh) return _err_('시트 없음: 제품현황_국내');
 
@@ -989,7 +979,7 @@ function handleUpdateProduct(payload) {
 // [5] 철수 — 데모 + 상용 만료/만료예정 포함
 // ──────────────────────────────────────────────────────────────
 function handleGetDemoList() {
-  var ss = SpreadsheetApp.openById(HEULING_SS_ID);
+  var ss = SpreadsheetApp.openById(현장관리시스템_SS_ID);
   var sh = _getDomesticSheet_(ss);
   if (!sh) return _err_('시트 없음: 제품현황_국내');
 
@@ -1041,7 +1031,7 @@ function handleGetDemoList() {
 
 
 function handleWithdrawDemo(payload) {
-  var ss      = SpreadsheetApp.openById(HEULING_SS_ID);
+  var ss      = SpreadsheetApp.openById(현장관리시스템_SS_ID);
   var sh      = ss.getSheetByName(HL_SH.RETRIEVAL);
   if (!sh) return _err_('시트 없음: ' + HL_SH.RETRIEVAL);
 
@@ -1079,7 +1069,7 @@ function handleGetMyIssues(params) {
   var email = String((params && params.email) || '').trim().toLowerCase();
   if (!email) return _ok_([]);
 
-  var ss        = SpreadsheetApp.openById(HEULING_SS_ID);
+  var ss        = SpreadsheetApp.openById(현장관리시스템_SS_ID);
   var staffName = _getStaffName_(ss, email);
   var sh        = ss.getSheetByName(HL_SH.CS);
   if (!sh) return _err_('시트 없음: ' + HL_SH.CS);
@@ -1121,7 +1111,7 @@ function handleCompleteIssue(payload) {
   // v8: CS 상태를 '완료'로 변경 + 처리완료일 자동
   var rowIndex = parseInt(payload.rowIndex, 10);
   if (!rowIndex) return _err_('rowIndex 필수');
-  var ss = SpreadsheetApp.openById(HEULING_SS_ID);
+  var ss = SpreadsheetApp.openById(현장관리시스템_SS_ID);
   var sh = ss.getSheetByName(HL_SH.CS);
   if (!sh) return _err_('시트 없음');
   sh.getRange(rowIndex, 12).setValue('완료');  // L(12): 상태 → 1-indexed=12
@@ -1136,7 +1126,7 @@ function handleDelegateIssue(payload) {
   var rowIndex = parseInt(payload.rowIndex, 10);
   var newEmail = String(payload.newAssigneeEmail || '').trim();
   if (!rowIndex || !newEmail) return _err_('rowIndex, newAssigneeEmail 필수');
-  var ss = SpreadsheetApp.openById(HEULING_SS_ID);
+  var ss = SpreadsheetApp.openById(현장관리시스템_SS_ID);
   var sh = ss.getSheetByName(HL_SH.CS);
   if (!sh) return _err_('시트 없음');
   // 담당자(I=9열 1-indexed) 변경
@@ -1147,7 +1137,7 @@ function handleDelegateIssue(payload) {
     var row = sh.getRange(rowIndex, 1, 1, 10).getValues()[0];
     MailApp.sendEmail({
       to: newEmail,
-      subject: '[HeuLing] CS 재인계 알림 — ' + String(row[1] || ''),
+      subject: '[현장관리시스템] CS 재인계 알림 — ' + String(row[1] || ''),
       htmlBody: '<p>CS 이력이 귀하에게 재인계되었습니다.</p>' +
         '<p><b>병원:</b> ' + String(row[1] || '') + '</p>' +
         '<p><b>내용:</b> ' + String(row[6] || '') + '</p>',
@@ -1199,7 +1189,7 @@ function handleUploadPhoto(payload) {
 // [8] 직원 목록
 // ──────────────────────────────────────────────────────────────
 function handleGetStaffList() {
-  return _ok_(HEURON_STAFF);
+  return _ok_(회사_STAFF);
 }
 
 
@@ -1273,7 +1263,7 @@ function _getOrCreateFolder_(parent, name) {
 }
 function _getReceiptRootFolder_() {
   if (RECEIPT_ROOT_FOLDER_ID) { try { return DriveApp.getFolderById(RECEIPT_ROOT_FOLDER_ID); } catch(e) {} }
-  return _getOrCreateFolder_(DriveApp.getRootFolder(), 'HeuLing_영수증');
+  return _getOrCreateFolder_(DriveApp.getRootFolder(), '현장관리시스템_영수증');
 }
 function _getReceiptFolder_(userName, yearMonth) {
   return _getOrCreateFolder_(_getOrCreateFolder_(_getReceiptRootFolder_(), userName), yearMonth);
@@ -1285,7 +1275,7 @@ function _getReceiptFolder_(userName, yearMonth) {
 var RECEIPT_HEADERS_V10 = ['날짜','담당자','이메일','금액','메모','분류','하위분류','세부분류','세부메모','파일ID','파일명','파일URL','등록시각'];
 
 function _ensureReceiptSheet_() {
-  var ss = SpreadsheetApp.openById(HEULING_SS_ID);
+  var ss = SpreadsheetApp.openById(현장관리시스템_SS_ID);
   var sh = ss.getSheetByName(HL_SH.RECEIPT);
   if (!sh) {
     // 신규 시트 생성
@@ -1335,8 +1325,8 @@ function _ensureReceiptSheet_() {
   return sh;
 }
 function _nameByEmail_(email) {
-  for (var i = 0; i < HEURON_STAFF.length; i++) {
-    if (HEURON_STAFF[i].email === email) return HEURON_STAFF[i].name;
+  for (var i = 0; i < 회사_STAFF.length; i++) {
+    if (회사_STAFF[i].email === email) return 회사_STAFF[i].name;
   }
   return email.split('@')[0];
 }
@@ -1564,7 +1554,7 @@ function handleGenerateReceiptPDF(payload) {
 
     // ── 푸터 ──
     body.appendHorizontalRule();
-    var footPara = body.appendParagraph('HeuLing   |   ' + email + '   |   ' + genDate + ' 출력');
+    var footPara = body.appendParagraph('현장관리시스템   |   ' + email + '   |   ' + genDate + ' 출력');
     footPara.setAlignment(DocumentApp.HorizontalAlignment.CENTER);
     footPara.editAsText().setFontSize(9).setForegroundColor('#aaaaaa');
 
@@ -1604,7 +1594,7 @@ function handleGenerateReceiptPDF(payload) {
 
 function handleGetReleaseNotes() {
   try {
-    var ss         = SpreadsheetApp.openById(HEULING_SS_ID);
+    var ss         = SpreadsheetApp.openById(현장관리시스템_SS_ID);
     var cacheSheet = _getReleaseCacheSheet_(ss);
 
     // 캐시 만료 기준: 24시간
@@ -1689,7 +1679,7 @@ function handleUpdateReleaseCache() {
       var m = title.match(re);
       if (!m) continue;
 
-      var product = m[1].trim().replace(/^Heuron\s+/i, '');  // "Heuron IPD" → "IPD"
+      var product = m[1].trim().replace(/^회사\s+/i, '');  // "회사 IPD" → "IPD"
       var dateRaw = m[2];
       var version = m[3];
       var pageUrl = CONFLUENCE_BASE_URL + '/wiki' + page._links.webui;
@@ -1726,7 +1716,7 @@ function handleUpdateReleaseCache() {
     releases.sort(function(a, b) { return b.dateRaw.localeCompare(a.dateRaw); });
 
     // 캐시 시트 저장
-    var ss         = SpreadsheetApp.openById(HEULING_SS_ID);
+    var ss         = SpreadsheetApp.openById(현장관리시스템_SS_ID);
     var cacheSheet = _getReleaseCacheSheet_(ss);
     if (!cacheSheet) {
       cacheSheet = ss.insertSheet(HL_SH.RELEASE_CACHE);
@@ -1834,9 +1824,9 @@ function _ensureEditLogSheet_(ss) {
 function handleGetOrRegisterStaff(params) {
   var email = String((params && params.email) || '').trim().toLowerCase();
   var name  = String((params && params.name)  || '').trim();
-  if (!email || !email.endsWith('@iheuron.com')) return _err_('iheuron.com 계정만 허용됩니다.');
+  if (!email || !email.endsWith('@i회사.com')) return _err_('i회사.com 계정만 허용됩니다.');
 
-  var ss = SpreadsheetApp.openById(HEULING_SS_ID);
+  var ss = SpreadsheetApp.openById(현장관리시스템_SS_ID);
   var sh = _ensureStaffSheet_(ss);
 
   var lastRow = sh.getLastRow();
@@ -1872,14 +1862,14 @@ function handleGetOrRegisterStaff(params) {
 
 /**
  * 직원 목록 전체 반환 (재인계 등에서 사용)
- * 직원목록 시트 우선, 없으면 HEURON_STAFF 폴백
+ * 직원목록 시트 우선, 없으면 회사_STAFF 폴백
  */
 function handleGetStaffList() {
-  var ss = SpreadsheetApp.openById(HEULING_SS_ID);
+  var ss = SpreadsheetApp.openById(현장관리시스템_SS_ID);
   var sh = _getStaffSheet_(ss);
 
   if (!sh || sh.getLastRow() < 2) {
-    return _ok_(HEURON_STAFF);
+    return _ok_(회사_STAFF);
   }
 
   var colCount = Math.min(sh.getLastColumn(), 5);
@@ -1925,9 +1915,9 @@ function _getStaffName_(ss, email) {
       }
     }
   }
-  // HEURON_STAFF 폴백
-  for (var j = 0; j < HEURON_STAFF.length; j++) {
-    if (HEURON_STAFF[j].email.toLowerCase() === emailL) return HEURON_STAFF[j].name;
+  // 회사_STAFF 폴백
+  for (var j = 0; j < 회사_STAFF.length; j++) {
+    if (회사_STAFF[j].email.toLowerCase() === emailL) return 회사_STAFF[j].name;
   }
   return email.split('@')[0];
 }
@@ -1945,7 +1935,7 @@ function handleGetMyHistory(params) {
   var email = String((params && params.email) || '').trim().toLowerCase();
   if (!email) return _ok_({ cs: [], demo: [] });
 
-  var ss = SpreadsheetApp.openById(HEULING_SS_ID);
+  var ss = SpreadsheetApp.openById(현장관리시스템_SS_ID);
   var staffName = _getStaffName_(ss, email);
 
   // ── CS 이력 (20열 기준) ──────────────────────────────────
@@ -2038,7 +2028,7 @@ function handleGetEditCount(params) {
   var rowIndex  = parseInt((params && params.rowIndex) || '0', 10);
   if (!rowIndex) return _ok_({ count: 0 });
 
-  var ss  = SpreadsheetApp.openById(HEULING_SS_ID);
+  var ss  = SpreadsheetApp.openById(현장관리시스템_SS_ID);
   var sh  = _ensureEditLogSheet_(ss);
   var key = sheetType + '_' + rowIndex;
 
@@ -2088,7 +2078,7 @@ function handleUpdateCSRecord(payload) {
   var email    = String(payload.email || '').trim().toLowerCase();
   if (!rowIndex || !email) return _err_('rowIndex, email 필수');
 
-  var ss   = SpreadsheetApp.openById(HEULING_SS_ID);
+  var ss   = SpreadsheetApp.openById(현장관리시스템_SS_ID);
   var role = _getStaffRole_(ss, email);
 
   var sh = ss.getSheetByName(HL_SH.CS);
@@ -2152,7 +2142,7 @@ function handleUpdateCSStatus(payload) {
   var VALID = ['접수', '진행중', '완료', '보류'];
   if (VALID.indexOf(newStatus) < 0) return _err_('유효하지 않은 상태: ' + newStatus);
 
-  var ss = SpreadsheetApp.openById(HEULING_SS_ID);
+  var ss = SpreadsheetApp.openById(현장관리시스템_SS_ID);
   var sh = ss.getSheetByName(HL_SH.CS);
   if (!sh) return _err_('CS이력 시트 없음');
   if (rowIndex > sh.getLastRow()) return _err_('행 번호 오류');
@@ -2178,7 +2168,7 @@ function handleDeleteCSRecord(payload) {
   var email    = String(payload.email || '').trim().toLowerCase();
   if (!rowIndex || !email) return _err_('rowIndex, email 필수');
 
-  var ss   = SpreadsheetApp.openById(HEULING_SS_ID);
+  var ss   = SpreadsheetApp.openById(현장관리시스템_SS_ID);
   var role = _getStaffRole_(ss, email);
   var sh   = ss.getSheetByName(HL_SH.CS);
   if (!sh) return _err_('CS이력 시트 없음');
@@ -2206,7 +2196,7 @@ function handleGetCSHistory(params) {
   var csStatus  = String((params && params.csStatus)  || '').trim();
   if (!email) return _ok_([]);
 
-  var ss        = SpreadsheetApp.openById(HEULING_SS_ID);
+  var ss        = SpreadsheetApp.openById(현장관리시스템_SS_ID);
   var staffName = _getStaffName_(ss, email);
   var csSheet   = ss.getSheetByName(HL_SH.CS);
   if (!csSheet || csSheet.getLastRow() < 3) return _ok_([]);
@@ -2274,7 +2264,7 @@ function handleUpdateDemoRecord(payload) {
   var email    = String(payload.email || '').trim().toLowerCase();
   if (!rowIndex || !email) return _err_('rowIndex, email 필수');
 
-  var ss   = SpreadsheetApp.openById(HEULING_SS_ID);
+  var ss   = SpreadsheetApp.openById(현장관리시스템_SS_ID);
   var role = _getStaffRole_(ss, email);
 
   // 수정 권한 체크 (일반: 1회 제한)
@@ -2323,7 +2313,7 @@ function handleUpdateDemoRecord(payload) {
 // params.period: '1month' | 'all'
 // ──────────────────────────────────────────────────────────────
 function handleGetDomesticList(params) {
-  var ss = SpreadsheetApp.openById(HEULING_SS_ID);
+  var ss = SpreadsheetApp.openById(현장관리시스템_SS_ID);
   var sh = _getDomesticSheet_(ss);
   if (!sh) return _err_('시트 없음: 제품현황_국내');
 
@@ -2401,7 +2391,7 @@ function handleUpdateDomesticRow(payload) {
   var email    = String(payload.email || '').trim().toLowerCase();
   if (!rowIndex || !email) return _err_('rowIndex, email 필수');
 
-  var ss   = SpreadsheetApp.openById(HEULING_SS_ID);
+  var ss   = SpreadsheetApp.openById(현장관리시스템_SS_ID);
   var sh   = _getDomesticSheet_(ss);
   if (!sh) return _err_('제품현황_국내 시트 없음');
   if (rowIndex > sh.getLastRow()) return _err_('행 번호 오류');
@@ -2446,7 +2436,7 @@ function handleDeleteDomesticRow(payload) {
   var email    = String(payload.email || '').trim().toLowerCase();
   if (!rowIndex || !email) return _err_('rowIndex, email 필수');
 
-  var ss   = SpreadsheetApp.openById(HEULING_SS_ID);
+  var ss   = SpreadsheetApp.openById(현장관리시스템_SS_ID);
   var role = _getStaffRole_(ss, email);
   var sh   = _getDomesticSheet_(ss);
   if (!sh) return _err_('제품현황_국내 시트 없음');
@@ -2474,7 +2464,7 @@ function handleDeleteDomesticRow(payload) {
 function handleGetNotices(params) {
   var type = String((params && params.type) || 'all').trim().toLowerCase();
 
-  var ss = SpreadsheetApp.openById(HEULING_SS_ID);
+  var ss = SpreadsheetApp.openById(현장관리시스템_SS_ID);
   var sh = ss.getSheetByName(HL_SH.NOTICE);
   if (!sh) {
     // 이모지 없는 이름으로 재시도
@@ -2612,7 +2602,7 @@ function sendMonthlyReceiptEmail() {
   var yearMonth = Utilities.formatDate(prevMonth, 'Asia/Seoul', 'yyyy-MM');
   var ymLabel   = Utilities.formatDate(prevMonth, 'Asia/Seoul', 'yyyy년 M월');
 
-  var ss        = SpreadsheetApp.openById(HEULING_SS_ID);
+  var ss        = SpreadsheetApp.openById(현장관리시스템_SS_ID);
   var sh        = ss.getSheetByName(HL_SH.RECEIPT);
   if (!sh || sh.getLastRow() < 2) return;
 
@@ -2686,14 +2676,14 @@ function sendMonthlyReceiptEmail() {
       + '</tr></thead>'
       + '<tbody>' + tableRows + '</tbody>'
       + '</table>'
-      + '<p style="margin:20px 0 0;font-size:12px;color:#9ca3af;">본 메일은 HeuLing 시스템에서 자동 발송됩니다.</p>'
+      + '<p style="margin:20px 0 0;font-size:12px;color:#9ca3af;">본 메일은 현장관리시스템 시스템에서 자동 발송됩니다.</p>'
       + '</div></div>';
 
     GmailApp.sendEmail(
       staff.email,
-      '[HeuLing] ' + ymLabel + ' 영수증 내역 (' + staff.name + ')',
+      '[현장관리시스템] ' + ymLabel + ' 영수증 내역 (' + staff.name + ')',
       ymLabel + ' 영수증 ' + rows.length + '건, 합계 ' + staff.total.toLocaleString() + '원',
-      { htmlBody: html, name: 'HeuLing 시스템' }
+      { htmlBody: html, name: '현장관리시스템 시스템' }
     );
   }
 }
@@ -2740,7 +2730,7 @@ function handleReplacePhoto(payload) {
     if (!b64)         return _err_('newFileBase64 필수');
     if (rowIndex < 2) return _err_('rowIndex 는 2 이상');
 
-    var ss = SpreadsheetApp.openById(HEULING_SS_ID);
+    var ss = SpreadsheetApp.openById(현장관리시스템_SS_ID);
     var sh, fileIdCol, fileNameCol, fileUrlCol;
 
     if (sheetType === 'receipt') {
@@ -2813,7 +2803,7 @@ var SVC_REPORT_HEADERS = [
 ];
 
 function _ensureSvcReportSheet_() {
-  var ss = SpreadsheetApp.openById(HEULING_SS_ID);
+  var ss = SpreadsheetApp.openById(현장관리시스템_SS_ID);
   var sh = ss.getSheetByName(SVC_REPORT_SHEET);
   if (!sh) {
     sh = ss.insertSheet(SVC_REPORT_SHEET);
@@ -3131,7 +3121,7 @@ function handleSendServiceReportEmail(p) {
       + '<div style="text-align:center;margin:28px 0;">'
       + '<a href="' + pdfUrl + '" style="display:inline-block;background:#1e3a5f;color:#fff;padding:12px 28px;border-radius:8px;text-decoration:none;font-weight:bold;font-size:14px;">📄 서비스확인서 PDF 보기</a>'
       + '</div>'
-      + '<p style="color:#9ca3af;font-size:12px;border-top:1px solid #e5e7eb;padding-top:16px;margin-top:16px;">본 이메일은 휴런 HeuLing 시스템에서 자동 발송되었습니다.<br>문의: ' + 점검자명 + ' · 휴런 TE팀</p>'
+      + '<p style="color:#9ca3af;font-size:12px;border-top:1px solid #e5e7eb;padding-top:16px;margin-top:16px;">본 이메일은 휴런 현장관리시스템 시스템에서 자동 발송되었습니다.<br>문의: ' + 점검자명 + ' · 휴런 TE팀</p>'
       + '</div></div>';
 
     GmailApp.sendEmail(custEmail, subject, body, {
@@ -3369,7 +3359,7 @@ function handleGenerateInstallRequestPDF(p) {
     body.appendParagraph('');
 
     // TE 서명
-    body.appendParagraph('Heuron TE 담당자 확인').setAttributes(h2Style);
+    body.appendParagraph('회사 TE 담당자 확인').setAttributes(h2Style);
     var tSign2 = body.appendTable(); tSign2.setBorderWidth(0.5);
     addRow(tSign2,'병원명', A.병원명); addRow(tSign2,'TE 담당자', d.TE담당자명||'');
     addRow(tSign2,'이메일', d.TE이메일||'');
@@ -3661,7 +3651,7 @@ function handleGenerateQualificationPDF(p) {
 // 영업: A+B+C+서명 저장 (상태: 영업완료, TE 대기)
 function handleSaveInstallDraft(p) {
   try {
-    var ss = SpreadsheetApp.openById(HEULING_SS_ID);
+    var ss = SpreadsheetApp.openById(현장관리시스템_SS_ID);
     var shName = '설치환경 정보요청서 데이터';
     var sh = ss.getSheetByName(shName);
     if (!sh) {
@@ -3700,7 +3690,7 @@ function handleSaveInstallDraft(p) {
 // TE: 영업완료 목록 조회
 function handleGetInstallDrafts(p) {
   try {
-    var ss = SpreadsheetApp.openById(HEULING_SS_ID);
+    var ss = SpreadsheetApp.openById(현장관리시스템_SS_ID);
     var sh = ss.getSheetByName('설치환경 정보요청서 데이터');
     if (!sh || sh.getLastRow() < 2) return _ok_([]);
     var data = sh.getRange(2, 1, sh.getLastRow()-1, 35).getValues();
@@ -3735,7 +3725,7 @@ function handleGetInstallDrafts(p) {
 // TE: D+E 이어서 저장 + PDF 생성
 function handleContinueInstallRequest(p) {
   try {
-    var ss = SpreadsheetApp.openById(HEULING_SS_ID);
+    var ss = SpreadsheetApp.openById(현장관리시스템_SS_ID);
     var sh = ss.getSheetByName('설치환경 정보요청서 데이터');
     if (!sh) return _err_('설치환경 정보요청서 데이터 시트 없음');
     var rowIndex = p.rowIndex || 0;
